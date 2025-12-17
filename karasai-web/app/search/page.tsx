@@ -1,232 +1,228 @@
-'use client'
-
-import { useState } from 'react'
-import Image from 'next/image'
-import Link from 'next/link'
-import { Heart } from 'lucide-react'
+import { Suspense } from 'react'
+import { createClient } from '@/lib/supabase/server'
+import SearchResults from '@/components/search/SearchResults'
 import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
 
-export default function SearchPage() {
-  const [filters, setFilters] = useState({
-    onlyComingSoon: false,
-    onlyAvailable: false,
-  })
+// Force fresh data on every request - no caching
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
 
-  // Sample properties
-  const properties = [
-    {
-      id: '1',
-      address: '1001 ROSE LANE',
-      city: 'PHOENIX, AZ 85014',
-      beds: 3,
-      baths: 2,
-      sqft: 1652,
-      status: 'available',
-      image: 'https://placehold.co/600x400/BFDBF7/333?text=1001+Rose+Lane',
-    },
-    {
-      id: '2',
-      address: '5815 N 13TH ST',
-      city: 'PHOENIX, AZ 85014',
-      beds: 3,
-      baths: 2,
-      sqft: 1518,
-      status: 'coming-soon',
-      image: 'https://placehold.co/600x400/BFDBF7/333?text=5815+N+13th+St',
-    },
-    {
-      id: '3',
-      address: '6342 N. 11TH ST',
-      city: 'PHOENIX, AZ 85014',
-      beds: 3,
-      baths: 2,
-      sqft: 1672,
-      status: 'occupied',
-      image: 'https://placehold.co/600x400/BFDBF7/333?text=6342+N+11th+St',
-    },
-    {
-      id: '4',
-      address: '6342 N. 11TH ST',
-      city: 'PHOENIX, AZ 85014',
-      beds: 3,
-      baths: 2,
-      sqft: 1672,
-      status: 'occupied',
-      image: 'https://placehold.co/600x400/BFDBF7/333?text=Property+4',
-    },
-    {
-      id: '5',
-      address: '1001 ROSE LANE',
-      city: 'PHOENIX, AZ 85014',
-      beds: 3,
-      baths: 2,
-      sqft: 1652,
-      status: 'available',
-      image: 'https://placehold.co/600x400/BFDBF7/333?text=Property+5',
-    },
-    {
-      id: '6',
-      address: '5815 N 13TH ST',
-      city: 'PHOENIX, AZ 85014',
-      beds: 3,
-      baths: 2,
-      sqft: 1518,
-      status: 'coming-soon',
-      image: 'https://placehold.co/600x400/BFDBF7/333?text=Property+6',
-    },
-    {
-      id: '7',
-      address: '5815 N 13TH ST',
-      city: 'PHOENIX, AZ 85014',
-      beds: 3,
-      baths: 2,
-      sqft: 1518,
-      status: 'coming-soon',
-      image: 'https://placehold.co/600x400/BFDBF7/333?text=Property+7',
-    },
-    {
-      id: '8',
-      address: '6342 N. 11TH ST',
-      city: 'PHOENIX, AZ 85014',
-      beds: 3,
-      baths: 2,
-      sqft: 1672,
-      status: 'occupied',
-      image: 'https://placehold.co/600x400/BFDBF7/333?text=Property+8',
-    },
-    {
-      id: '9',
-      address: '1001 ROSE LANE',
-      city: 'PHOENIX, AZ 85014',
-      beds: 3,
-      baths: 2,
-      sqft: 1652,
-      status: 'available',
-      image: 'https://placehold.co/600x400/BFDBF7/333?text=Property+9',
-    },
-  ]
+interface SearchPageProps {
+  searchParams: Promise<{
+    q?: string
+    city?: string
+    state?: string
+    zip?: string
+    beds?: string
+    baths?: string
+    min_sqft?: string
+    max_sqft?: string
+    status?: string
+    pet_policy?: string
+    property_type?: string
+    amenities?: string
+    management_companies?: string
+    sort?: string
+    page?: string
+  }>
+}
 
-  const getStatusBadge = (status: string) => {
-    switch (status) {
-      case 'available':
-        return (
-          <span className="absolute left-0 top-0 bg-status-available px-4 py-1 text-xs font-semibold uppercase text-white">
-            Available
-          </span>
-        )
-      case 'coming-soon':
-        return (
-          <span className="absolute left-0 top-0 bg-status-coming px-4 py-1 text-xs font-semibold uppercase text-white">
-            Coming Soon
-          </span>
-        )
-      case 'occupied':
-        return (
-          <span className="absolute left-0 top-0 bg-status-rented px-4 py-1 text-xs font-semibold uppercase text-white">
-            Occupied
-          </span>
-        )
-    }
+export default async function SearchPage({ searchParams }: SearchPageProps) {
+  const supabase = await createClient()
+  
+  // Await searchParams for Next.js 15+ compatibility
+  const params = await searchParams
+  
+  // Parse search params
+  const query = params.q || ''
+  const city = params.city || ''
+  const state = params.state || ''
+  const zip = params.zip || ''
+  const beds = params.beds ? params.beds.split(',') : []
+  const baths = params.baths ? params.baths.split(',') : []
+  const minSqft = params.min_sqft ? parseInt(params.min_sqft) : undefined
+  const maxSqft = params.max_sqft ? parseInt(params.max_sqft) : undefined
+  const statuses = params.status ? params.status.split(',') : ['available', 'coming_soon', 'rented']
+  const petPolicy = params.pet_policy ? params.pet_policy.split(',') : []
+  const propertyTypes = params.property_type ? params.property_type.split(',') : []
+  const amenities = params.amenities ? params.amenities.split(',') : []
+  const managementCompanies = params.management_companies ? params.management_companies.split(',') : []
+  const sortBy = params.sort || 'created_at_desc'
+  const page = params.page ? parseInt(params.page) : 1
+  
+  // Build query
+  let queryBuilder = supabase
+    .from('properties')
+    .select('*', { count: 'exact' })
+  
+  // Text search (city, state, zip, or address)
+  if (query) {
+    queryBuilder = queryBuilder.or(`city.ilike.%${query}%,state.ilike.%${query}%,zip.ilike.%${query}%,address.ilike.%${query}%`)
   }
-
+  
+  // City filter
+  if (city) {
+    queryBuilder = queryBuilder.ilike('city', `%${city}%`)
+  }
+  
+  // State filter
+  if (state) {
+    queryBuilder = queryBuilder.ilike('state', `%${state}%`)
+  }
+  
+  // ZIP filter
+  if (zip) {
+    queryBuilder = queryBuilder.eq('zip', zip)
+  }
+  
+  // Bedrooms filter
+  if (beds.length > 0) {
+    queryBuilder = queryBuilder.in('bedrooms', beds.map(b => parseFloat(b)))
+  }
+  
+  // Bathrooms filter
+  if (baths.length > 0) {
+    queryBuilder = queryBuilder.in('bathrooms', baths.map(b => parseFloat(b)))
+  }
+  
+  // Square footage range
+  if (minSqft) {
+    queryBuilder = queryBuilder.gte('square_feet', minSqft)
+  }
+  if (maxSqft) {
+    queryBuilder = queryBuilder.lte('square_feet', maxSqft)
+  }
+  
+  // Status filter
+  if (statuses.length > 0) {
+    queryBuilder = queryBuilder.in('status', statuses)
+  }
+  
+  // Pet policy filter
+  if (petPolicy.length > 0) {
+    queryBuilder = queryBuilder.in('pet_policy', petPolicy)
+  }
+  
+  // Property type filter
+  if (propertyTypes.length > 0) {
+    queryBuilder = queryBuilder.in('property_type', propertyTypes)
+  }
+  
+  // Management companies filter
+  if (managementCompanies.length > 0) {
+    queryBuilder = queryBuilder.in('management_company_id', managementCompanies)
+  }
+  
+  // Amenities filter (JSONB contains)
+  if (amenities.length > 0) {
+    amenities.forEach(amenity => {
+      queryBuilder = queryBuilder.contains('amenities', [amenity])
+    })
+  }
+  
+  // Sorting
+  switch (sortBy) {
+    case 'rent_asc':
+      queryBuilder = queryBuilder.order('rent', { ascending: true })
+      break
+    case 'rent_desc':
+      queryBuilder = queryBuilder.order('rent', { ascending: false })
+      break
+    case 'beds_asc':
+      queryBuilder = queryBuilder.order('bedrooms', { ascending: true })
+      break
+    case 'beds_desc':
+      queryBuilder = queryBuilder.order('bedrooms', { ascending: false })
+      break
+    case 'available_first':
+      queryBuilder = queryBuilder.order('status', { ascending: true }).order('created_at', { ascending: false })
+      break
+    case 'created_at_desc':
+    default:
+      queryBuilder = queryBuilder.order('created_at', { ascending: false })
+      break
+  }
+  
+  // Pagination
+  const limit = 50
+  const offset = (page - 1) * limit
+  queryBuilder = queryBuilder.range(offset, offset + limit - 1)
+  
+  // Execute query
+  const { data: properties, error, count } = await queryBuilder
+  
+  if (error) {
+    console.error('Error fetching properties:', error.message || error)
+    // Return empty results on error
+    return (
+      <div className="flex min-h-screen flex-col">
+        <Header />
+        
+        <main className="flex-1 bg-neutral-gray">
+          <Suspense fallback={<div className="container-custom py-8">Loading...</div>}>
+            <SearchResults
+              initialProperties={[]}
+              totalCount={0}
+              searchLocation="All Areas"
+              initialFilters={{
+                query,
+                city,
+                state,
+                zip,
+                beds,
+                baths,
+                minSqft,
+                maxSqft,
+                statuses,
+                petPolicy,
+                propertyTypes,
+                amenities,
+                managementCompanies,
+                sortBy,
+              }}
+            />
+          </Suspense>
+        </main>
+        
+        <Footer />
+      </div>
+    )
+  }
+  
+  // Get search location for display (city or query)
+  const searchLocation = city || query || 'All Areas'
+  
   return (
     <div className="flex min-h-screen flex-col">
       <Header />
       
       <main className="flex-1 bg-neutral-gray">
-        <div className="container-custom py-8">
-          {/* Header and Filters */}
-          <div className="mb-8">
-            <h1 className="mb-4 text-2xl font-medium uppercase tracking-wide text-neutral-dark">
-              Homes in 85014
-            </h1>
-            
-            <div className="flex gap-4">
-              <label className="flex items-center gap-2 text-sm text-neutral-dark">
-                <input
-                  type="checkbox"
-                  checked={filters.onlyComingSoon}
-                  onChange={(e) =>
-                    setFilters({ ...filters, onlyComingSoon: e.target.checked })
-                  }
-                  className="h-4 w-4 rounded border-neutral-dark/30 text-karasai-blue focus:ring-karasai-blue"
-                />
-                <span className="uppercase tracking-wide">Only Coming Soon</span>
-              </label>
-              
-              <label className="flex items-center gap-2 text-sm text-neutral-dark">
-                <input
-                  type="checkbox"
-                  checked={filters.onlyAvailable}
-                  onChange={(e) =>
-                    setFilters({ ...filters, onlyAvailable: e.target.checked })
-                  }
-                  className="h-4 w-4 rounded border-neutral-dark/30 text-karasai-blue focus:ring-karasai-blue"
-                />
-                <span className="uppercase tracking-wide">Only Available</span>
-              </label>
-            </div>
-          </div>
-
-          {/* Property Grid */}
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {properties.map((property) => (
-              <div key={property.id} className="group">
-                <Link href={`/properties/${property.id}`}>
-                  <div className="overflow-hidden rounded-lg bg-white shadow-md transition-shadow hover:shadow-lg">
-                    <div className="relative h-48">
-                      <Image
-                        src={property.image}
-                        alt={property.address}
-                        fill
-                        className="object-cover transition-transform group-hover:scale-105"
-                      />
-                      {getStatusBadge(property.status)}
-                    </div>
-                    
-                    <div className="p-4">
-                      <div className="mb-2 flex items-start justify-between">
-                        <div>
-                          <h3 className="text-sm font-semibold uppercase tracking-wide text-neutral-dark">
-                            {property.address}
-                          </h3>
-                          <p className="text-xs uppercase tracking-wide text-neutral-dark/60">
-                            {property.city}
-                          </p>
-                        </div>
-                        <button className="text-neutral-dark/60 transition-colors hover:text-status-rented">
-                          <Heart className="h-5 w-5" />
-                        </button>
-                      </div>
-                      
-                      <p className="text-xs uppercase tracking-wide text-neutral-dark/60">
-                        {property.beds} BED / {property.baths} BATH / {property.sqft.toLocaleString()} SQ. FT.
-                      </p>
-                    </div>
-                  </div>
-                </Link>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* CTA Section */}
-        <section className="bg-karasai-blue py-16 text-white">
-          <div className="container-custom flex flex-col items-center justify-center gap-6 text-center md:flex-row md:justify-between">
-            <h2 className="text-2xl font-medium uppercase tracking-wide md:text-3xl">
-              Want to list your home on Karasai?
-            </h2>
-            <Link
-              href="/contact"
-              className="rounded-md bg-white px-8 py-3 text-sm font-semibold uppercase tracking-wide text-karasai-blue transition-colors hover:bg-neutral-gray"
-            >
-              Contact Us
-            </Link>
-          </div>
-        </section>
+        <Suspense fallback={<div className="container-custom py-8">Loading...</div>}>
+          <SearchResults
+            initialProperties={properties || []}
+            totalCount={count || 0}
+            searchLocation={searchLocation}
+            initialFilters={{
+              query,
+              city,
+              state,
+              zip,
+              beds,
+              baths,
+              minSqft,
+              maxSqft,
+              statuses,
+              petPolicy,
+              propertyTypes,
+              amenities,
+              managementCompanies,
+              sortBy,
+            }}
+          />
+        </Suspense>
       </main>
-
+      
       <Footer />
     </div>
   )

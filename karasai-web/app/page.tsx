@@ -1,14 +1,17 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
 import { Play, X } from 'lucide-react'
 import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
+import SearchBar from '@/components/search/SearchBar'
 
 export default function HomePage() {
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false)
+  const router = useRouter()
 
   // Lock body scroll when modal is open (important for mobile)
   useEffect(() => {
@@ -19,6 +22,27 @@ export default function HomePage() {
       }
     }
   }, [isVideoModalOpen])
+
+  // Handle autocomplete result selection
+  const handleSelectResult = (result: any) => {
+    // Navigate to search page with appropriate query parameter
+    if (result.type === 'city') {
+      router.push(`/search?city=${encodeURIComponent(result.city)}`)
+    } else if (result.type === 'zip') {
+      router.push(`/search?zip=${encodeURIComponent(result.value)}`)
+    } else if (result.type === 'address') {
+      router.push(`/search?q=${encodeURIComponent(result.value)}`)
+    }
+  }
+
+  // Handle manual search (Enter key or button click)
+  const handleSearch = (query: string) => {
+    if (query) {
+      router.push(`/search?q=${encodeURIComponent(query)}`)
+    } else {
+      router.push('/search')
+    }
+  }
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -46,21 +70,14 @@ export default function HomePage() {
                   We make it simple to find verified rental homes
                 </p>
                 
-                {/* Search Box */}
-                <div className="w-full max-w-2xl px-4">
-                  <div className="flex gap-2">
-                    <input
-                      type="text"
-                      placeholder="City, state, or ZIP"
-                      className="flex-1 rounded-md px-4 py-3 text-sm text-neutral-dark placeholder:text-neutral-dark/50 focus:outline-none focus:ring-2 focus:ring-karasai-blue md:px-6 md:py-4 md:text-base"
-                    />
-                    <Link
-                      href="/search"
-                      className="rounded-md bg-karasai-blue px-4 py-3 text-sm font-semibold uppercase tracking-wide text-white transition-colors hover:bg-karasai-blue/90 md:px-8 md:py-4 md:text-base"
-                    >
-                      Search
-                    </Link>
-                  </div>
+                {/* Search Box with Autocomplete */}
+                <div className="w-full max-w-2xl px-4 text-karasai-blue">
+                  <SearchBar
+                    buttonText="Search"
+                    placeholder="City, state, or ZIP"
+                    onSelectResult={handleSelectResult}
+                    onSearch={handleSearch}
+                  />
                 </div>
               </div>
             </div>

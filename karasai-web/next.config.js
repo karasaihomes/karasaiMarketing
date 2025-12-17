@@ -13,13 +13,13 @@ const nextConfig = {
       },
     ],
     formats: ['image/webp', 'image/avif'],
-    dangerouslyAllowSVG: true,
-    contentDispositionType: 'attachment',
-    contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
+    // Reduce image cache time from 60 days to 1 minute for faster updates
+    minimumCacheTTL: 60,
   },
   experimental: {
     optimizePackageImports: ['lucide-react', '@supabase/supabase-js'],
   },
+
 }
 
 module.exports = nextConfig

@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Montserrat } from 'next/font/google'
 import './globals.css'
 import { Toaster } from 'react-hot-toast'
+import AdSenseScript from '@/components/ads/AdSenseScript'
 
 const montserrat = Montserrat({
   subsets: ['latin'],
@@ -75,6 +76,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={montserrat.variable}>
+      <head>
+        <AdSenseScript />
+      </head>
       <body className="min-h-screen">
         {children}
         <Toaster
