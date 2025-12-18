@@ -177,7 +177,7 @@ export default function HomePage() {
             {/* Video positioned to extend above the light blue section */}
             <div className="relative z-10 mx-auto aspect-video w-[85%] overflow-hidden rounded-lg shadow-2xl md:w-[75%] lg:w-[65%]">
               <Image
-                src="https://placehold.co/1200x675/E5E5E5/666?text=Video+Placeholder"
+                src="/images/testimonials/karasai_video.png"
                 alt="Video testimonial"
                 fill
                 className="object-cover"
@@ -197,8 +197,8 @@ export default function HomePage() {
               {/* Text below video */}
               <div className="mx-auto w-[85%] text-center md:w-[75%] lg:w-[65%]">
                 <p className="text-sm leading-relaxed text-neutral-dark/70">
-                  We've partnered with some of the industries largest owners and operators of rental homes. 
-                  Listen to how VERIHOME is changing the way people find and verify their new rental home.
+                  We've partnered with some of the industry's largest owners and operators of rental homes. 
+                  Listen to how Karasai is changing the way people find and verify their new rental home.
                 </p>
               </div>
             </div>
@@ -270,8 +270,7 @@ export default function HomePage() {
                 controls
                 autoPlay
               >
-                <source src="/videos/testimonial.mp4" type="video/mp4" />
-                <source src="/videos/testimonial.webm" type="video/webm" />
+                <source src="/videos/Rent_With_Confidence.mp4" type="video/mp4" />
                 Your browser does not support the video tag.
               </video>
             </div>
