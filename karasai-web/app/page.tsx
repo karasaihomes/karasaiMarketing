@@ -93,7 +93,7 @@ export default function HomePage() {
             
             <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
               {/* Property Card 1 */}
-              <Link href="/properties/1" className="group">
+              <Link href="/search" className="group">
                 <div className="overflow-hidden rounded-lg shadow-md transition-shadow hover:shadow-lg">
                   <div className="relative h-48">
                     <Image
@@ -112,7 +112,7 @@ export default function HomePage() {
               </Link>
 
               {/* Property Card 2 */}
-              <Link href="/properties/2" className="group">
+              <Link href="/search" className="group">
                 <div className="overflow-hidden rounded-lg shadow-md transition-shadow hover:shadow-lg">
                   <div className="relative h-48">
                     <Image
@@ -131,7 +131,7 @@ export default function HomePage() {
               </Link>
 
               {/* Property Card 3 */}
-              <Link href="/properties/3" className="group">
+              <Link href="/search" className="group">
                 <div className="overflow-hidden rounded-lg shadow-md transition-shadow hover:shadow-lg">
                   <div className="relative h-48">
                     <Image
@@ -150,7 +150,7 @@ export default function HomePage() {
               </Link>
 
               {/* Property Card 4 */}
-              <Link href="/properties/4" className="group">
+              <Link href="/search" className="group">
                 <div className="overflow-hidden rounded-lg shadow-md transition-shadow hover:shadow-lg">
                   <div className="relative h-48">
                     <Image
