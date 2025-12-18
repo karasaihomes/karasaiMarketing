@@ -3,6 +3,7 @@ import { Montserrat } from 'next/font/google'
 import './globals.css'
 import { Toaster } from 'react-hot-toast'
 import AdSenseScript from '@/components/ads/AdSenseScript'
+import { AuthProvider } from '@/lib/hooks/useAuth'
 
 const montserrat = Montserrat({
   subsets: ['latin'],
@@ -80,7 +81,9 @@ export default function RootLayout({
         <AdSenseScript />
       </head>
       <body className="min-h-screen">
-        {children}
+        <AuthProvider>
+          {children}
+        </AuthProvider>
         <Toaster
           position="top-center"
           toastOptions={{
