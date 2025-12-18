@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
+import { syncGuestFavoritesToAccount } from '@/lib/utils/syncFavorites'
 import { Eye, EyeOff, Check, X } from 'lucide-react'
 import Link from 'next/link'
 
@@ -11,7 +12,7 @@ interface SignUpFormProps {
 }
 
 interface PasswordStrength {
-  score: number // 0-4
+  score: number
   label: string
   color: string
 }
@@ -31,7 +32,6 @@ export default function SignUpForm({ onSuccess, onSwitchToLogin }: SignUpFormPro
   const [isLoading, setIsLoading] = useState(false)
   const [generalError, setGeneralError] = useState('')
 
-  // Calculate password strength
   const getPasswordStrength = (password: string): PasswordStrength => {
     let score = 0
     if (password.length >= 8) score++
@@ -51,7 +51,6 @@ export default function SignUpForm({ onSuccess, onSwitchToLogin }: SignUpFormPro
 
   const passwordStrength = getPasswordStrength(formData.password)
 
-  // Password requirements
   const passwordRequirements = [
     { label: 'At least 8 characters', test: (p: string) => p.length >= 8 },
     { label: 'One uppercase letter', test: (p: string) => /[A-Z]/.test(p) },
@@ -103,7 +102,6 @@ export default function SignUpForm({ onSuccess, onSwitchToLogin }: SignUpFormPro
     try {
       const supabase = createClient()
 
-      // Sign up user
       const { data, error } = await supabase.auth.signUp({
         email: formData.email,
         password: formData.password,
@@ -118,25 +116,29 @@ export default function SignUpForm({ onSuccess, onSwitchToLogin }: SignUpFormPro
 
       if (error) throw error
 
-      // Create user profile
       if (data.user) {
-        const { error: profileError } = await supabase
-          .from('user_profiles')
-          .insert([
-            {
-              id: data.user.id,
-              full_name: formData.fullName,
-              phone: formData.phone || null,
-            },
-          ])
+        // Create user profile
+        try {
+          const { error: profileError } = await supabase
+            .from('user_profiles')
+            .insert([
+              {
+                id: data.user.id,
+                full_name: formData.fullName,
+                phone: formData.phone || null,
+              },
+            ])
 
-        if (profileError) {
-          console.error('Profile creation error:', profileError)
-          // Don't throw - profile creation is non-critical
+          if (profileError) {
+            console.error('Profile creation failed:', profileError)
+          }
+        } catch (profileError) {
+          console.error('Profile creation exception:', profileError)
         }
-      }
 
-      // TODO: Send welcome email via Edge Function
+        // Sync guest favorites to user account
+        await syncGuestFavoritesToAccount(data.user.id)
+      }
 
       onSuccess()
     } catch (error: any) {
@@ -161,6 +163,8 @@ export default function SignUpForm({ onSuccess, onSwitchToLogin }: SignUpFormPro
       })
 
       if (error) throw error
+      
+      // Note: Sync will happen in callback route for OAuth
     } catch (error: any) {
       console.error('OAuth error:', error)
       setGeneralError(error.message || `Failed to sign up with ${provider}`)

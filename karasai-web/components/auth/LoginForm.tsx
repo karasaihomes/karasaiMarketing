@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
+import { syncGuestFavoritesToAccount } from '@/lib/utils/syncFavorites'
 import { Eye, EyeOff } from 'lucide-react'
 
 interface LoginFormProps {
@@ -51,12 +52,17 @@ export default function LoginForm({
 
     try {
       const supabase = createClient()
-      const { error } = await supabase.auth.signInWithPassword({
+      const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
       })
 
       if (error) throw error
+
+      // Sync guest favorites to user account
+      if (data.user) {
+        await syncGuestFavoritesToAccount(data.user.id)
+      }
 
       onSuccess()
     } catch (error: any) {
@@ -83,6 +89,8 @@ export default function LoginForm({
       })
 
       if (error) throw error
+      
+      // Note: Sync will happen in callback route for OAuth
     } catch (error: any) {
       console.error('OAuth error:', error)
       setGeneralError(error.message || `Failed to sign in with ${provider}`)
