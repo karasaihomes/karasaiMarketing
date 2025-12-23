@@ -4,7 +4,7 @@ import Image from 'next/image'
 export default function Footer() {
   const companyLinks = [
     { name: 'KARASAI', href: '/' },
-    { name: 'VERIFY A RENTAL HOME', href: '/search' },
+    { name: 'VERIFY A RENTAL HOME', href: '/verify' },
     { name: 'LIST YOUR HOME WITH US', href: '/list-your-home' },
   ]
 
