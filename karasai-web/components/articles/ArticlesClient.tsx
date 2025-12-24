@@ -36,7 +36,6 @@ export default function ArticlesClient() {
     fetchArticles()
   }, [])
 
-  // Read URL params on mount and when searchParams change
   useEffect(() => {
     const tagParam = searchParams.get('tag')
     const categoryParam = searchParams.get('category')
@@ -72,7 +71,6 @@ export default function ArticlesClient() {
 
       setArticles(data || [])
 
-      // Extract unique categories and tags
       const uniqueCategories = [...new Set(data?.map(a => a.category).filter(Boolean))] as string[]
       setCategories(uniqueCategories)
 
@@ -90,7 +88,6 @@ export default function ArticlesClient() {
   const filterArticles = () => {
     let filtered = [...articles]
 
-    // Search filter
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase()
       filtered = filtered.filter(article =>
@@ -101,12 +98,10 @@ export default function ArticlesClient() {
       )
     }
 
-    // Category filter
     if (selectedCategory !== 'all') {
       filtered = filtered.filter(article => article.category === selectedCategory)
     }
 
-    // Tag filter
     if (selectedTag !== 'all') {
       filtered = filtered.filter(article => article.tags?.includes(selectedTag))
     }
@@ -118,7 +113,6 @@ export default function ArticlesClient() {
     setSearchQuery('')
     setSelectedCategory('all')
     setSelectedTag('all')
-    // Update URL
     window.history.pushState({}, '', '/articles')
   }
 
@@ -137,9 +131,7 @@ export default function ArticlesClient() {
   return (
     <section className="py-8 md:py-12">
       <div className="container-custom">
-        {/* Search & Filters */}
         <div className="mb-8 rounded-lg border-2 border-neutral-gray bg-white p-4 md:p-6">
-          {/* Search Bar */}
           <div className="mb-4">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-neutral-dark/40 md:left-4" />
@@ -153,7 +145,6 @@ export default function ArticlesClient() {
             </div>
           </div>
 
-          {/* Mobile: Filter Toggle Button */}
           <div className="mb-4 md:hidden">
             <button
               onClick={() => setShowMobileFilters(!showMobileFilters)}
@@ -169,9 +160,7 @@ export default function ArticlesClient() {
             </button>
           </div>
 
-          {/* Desktop Filters (Always Visible) + Mobile Filters (Collapsible) */}
           <div className={`space-y-4 ${showMobileFilters ? 'block' : 'hidden md:block'}`}>
-            {/* Filter Header */}
             <div className="flex items-center gap-2">
               <Filter className="h-5 w-5 text-neutral-dark/60" />
               <span className="text-sm font-semibold uppercase tracking-wide text-neutral-dark">
@@ -179,9 +168,7 @@ export default function ArticlesClient() {
               </span>
             </div>
 
-            {/* Filter Controls */}
             <div className="flex flex-col gap-3 md:flex-row md:flex-wrap md:items-center">
-              {/* Category Filter */}
               <div className="flex-1 md:flex-none">
                 <select
                   value={selectedCategory}
@@ -197,7 +184,6 @@ export default function ArticlesClient() {
                 </select>
               </div>
 
-              {/* Tag Filter */}
               <div className="flex-1 md:flex-none">
                 <select
                   value={selectedTag}
@@ -213,7 +199,6 @@ export default function ArticlesClient() {
                 </select>
               </div>
 
-              {/* Clear Filters */}
               {(searchQuery || selectedCategory !== 'all' || selectedTag !== 'all') && (
                 <button
                   onClick={handleClearFilters}
@@ -225,14 +210,12 @@ export default function ArticlesClient() {
               )}
             </div>
 
-            {/* Results Count */}
             <div className="text-sm text-neutral-dark/60">
               Showing {filteredArticles.length} of {articles.length} articles
             </div>
           </div>
         </div>
 
-        {/* Articles Grid */}
         {filteredArticles.length === 0 ? (
           <div className="rounded-lg border-2 border-neutral-gray bg-white p-8 text-center md:p-12">
             <Search className="mx-auto mb-4 h-12 w-12 text-neutral-dark/20" />
@@ -255,8 +238,12 @@ export default function ArticlesClient() {
           </div>
         ) : (
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {filteredArticles.map((article) => (
-              <ArticleCard key={article.id} article={article} />
+            {filteredArticles.map((article, index) => (
+              <ArticleCard 
+                key={article.id} 
+                article={article}
+                priority={index < 3}
+              />
             ))}
           </div>
         )}

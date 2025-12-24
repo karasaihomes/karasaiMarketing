@@ -16,9 +16,10 @@ interface Article {
 
 interface ArticleCardProps {
   article: Article
+  priority?: boolean
 }
 
-export default function ArticleCard({ article }: ArticleCardProps) {
+export default function ArticleCard({ article, priority = false }: ArticleCardProps) {
   const formatDate = (dateString: string) => {
     const date = new Date(dateString)
     return date.toLocaleDateString('en-US', {
@@ -33,22 +34,21 @@ export default function ArticleCard({ article }: ArticleCardProps) {
       href={`/articles/${article.slug}`}
       className="group overflow-hidden rounded-lg border-2 border-neutral-gray bg-white shadow-sm transition-all hover:border-karasai-blue hover:shadow-md"
     >
-      {/* Featured Image - FIXED for performance */}
+      {/* Featured Image */}
       <div className="relative aspect-[16/9] overflow-hidden bg-neutral-gray">
         {article.featured_image_url ? (
           <Image
             src={article.featured_image_url}
             alt={article.title}
             fill
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
             className="object-cover transition-transform duration-300 group-hover:scale-105"
-            loading="lazy"
+            priority={priority}
+            loading={priority ? undefined : 'lazy'}
             quality={75}
           />
         ) : (
-          // Optimized placeholder - NO IMAGE, just styled div
           <div className="flex h-full flex-col items-center justify-center bg-gradient-to-br from-karasai-light to-karasai-blue/20 p-6">
-            {/* Inline SVG logo - much smaller than image */}
             <svg
               className="mb-3 h-16 w-16 opacity-30"
               viewBox="0 0 100 100"
