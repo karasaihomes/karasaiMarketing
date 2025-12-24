@@ -10,7 +10,7 @@ export default function Footer() {
 
   const aboutLinks = [
     { name: 'ABOUT US', href: '/about' },
-    { name: 'BLOG', href: '/articles' },
+    { name: 'ARTICLES', href: '/articles' },
     { name: 'PRIVACY POLICY', href: '/privacy' },
     { name: 'TERMS OF SERVICE', href: '/terms' },
   ]
