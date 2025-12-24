@@ -33,18 +33,53 @@ export default function ArticleCard({ article }: ArticleCardProps) {
       href={`/articles/${article.slug}`}
       className="group overflow-hidden rounded-lg border-2 border-neutral-gray bg-white shadow-sm transition-all hover:border-karasai-blue hover:shadow-md"
     >
-      {/* Featured Image */}
+      {/* Featured Image - FIXED for performance */}
       <div className="relative aspect-[16/9] overflow-hidden bg-neutral-gray">
         {article.featured_image_url ? (
           <Image
             src={article.featured_image_url}
             alt={article.title}
             fill
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             className="object-cover transition-transform duration-300 group-hover:scale-105"
+            loading="lazy"
+            quality={75}
           />
         ) : (
-          <div className="flex h-full items-center justify-center bg-karasai-light">
-            <span className="text-4xl font-bold text-karasai-blue opacity-20">K</span>
+          // Optimized placeholder - NO IMAGE, just styled div
+          <div className="flex h-full flex-col items-center justify-center bg-gradient-to-br from-karasai-light to-karasai-blue/20 p-6">
+            {/* Inline SVG logo - much smaller than image */}
+            <svg
+              className="mb-3 h-16 w-16 opacity-30"
+              viewBox="0 0 100 100"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <rect
+                x="10"
+                y="10"
+                width="80"
+                height="80"
+                rx="8"
+                stroke="#4E70C6"
+                strokeWidth="4"
+                fill="none"
+              />
+              <text
+                x="50"
+                y="60"
+                fontSize="36"
+                fontWeight="bold"
+                fill="#4E70C6"
+                textAnchor="middle"
+                fontFamily="Montserrat, sans-serif"
+              >
+                K
+              </text>
+            </svg>
+            <span className="text-xs font-semibold uppercase tracking-wide text-karasai-blue/60">
+              Karasai
+            </span>
           </div>
         )}
 
