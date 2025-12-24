@@ -1,7 +1,9 @@
+import { Suspense } from 'react'
 import ArticlesClient from '@/components/articles/ArticlesClient'
 import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
 import { Metadata } from 'next'
+import { Loader2 } from 'lucide-react'
 
 export const metadata: Metadata = {
   title: 'Rental Guides & Articles | Karasai - Expert Advice on Renting',
@@ -16,6 +18,19 @@ export const metadata: Metadata = {
   alternates: {
     canonical: 'https://karasai.com/articles',
   },
+}
+
+// Loading fallback component
+function ArticlesLoading() {
+  return (
+    <section className="py-12">
+      <div className="container-custom">
+        <div className="flex items-center justify-center py-20">
+          <Loader2 className="h-8 w-8 animate-spin text-karasai-blue" />
+        </div>
+      </div>
+    </section>
+  )
 }
 
 export default function ArticlesPage() {
@@ -36,8 +51,10 @@ export default function ArticlesPage() {
           </div>
         </section>
 
-        {/* Articles Content */}
-        <ArticlesClient />
+        {/* Articles Content - Wrapped in Suspense */}
+        <Suspense fallback={<ArticlesLoading />}>
+          <ArticlesClient />
+        </Suspense>
       </main>
 
       <Footer />
