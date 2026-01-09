@@ -93,7 +93,7 @@ export default function HomePage() {
             
             <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
               {/* Property Card 1 */}
-              <Link href="/search" className="group">
+              <Link href="/search?city=Charlotte" className="group">
                 <div className="overflow-hidden rounded-lg shadow-md transition-shadow hover:shadow-lg">
                   <div className="relative h-48">
                     <Image
@@ -112,7 +112,7 @@ export default function HomePage() {
               </Link>
 
               {/* Property Card 2 */}
-              <Link href="/search" className="group">
+              <Link href="/search?city=Odessa" className="group">
                 <div className="overflow-hidden rounded-lg shadow-md transition-shadow hover:shadow-lg">
                   <div className="relative h-48">
                     <Image
@@ -131,7 +131,7 @@ export default function HomePage() {
               </Link>
 
               {/* Property Card 3 */}
-              <Link href="/search" className="group">
+              <Link href="/search?city=Tulsa" className="group">
                 <div className="overflow-hidden rounded-lg shadow-md transition-shadow hover:shadow-lg">
                   <div className="relative h-48">
                     <Image
@@ -150,7 +150,7 @@ export default function HomePage() {
               </Link>
 
               {/* Property Card 4 */}
-              <Link href="/search" className="group">
+              <Link href="/search?city=Atlanta" className="group">
                 <div className="overflow-hidden rounded-lg shadow-md transition-shadow hover:shadow-lg">
                   <div className="relative h-48">
                     <Image
@@ -196,7 +196,7 @@ export default function HomePage() {
             <div className="relative -mt-32 rounded-lg bg-karasai-light pb-16 pt-48 md:-mt-64 md:pb-24 md:pt-80 lg:-mt-80 lg:pt-96">
               {/* Text below video */}
               <div className="mx-auto w-[85%] text-center md:w-[75%] lg:w-[65%]">
-                <p className="text-sm leading-relaxed text-neutral-dark/70">
+                <p className="text-sm leading-relaxed text-neutral-dark/100">
                   We've partnered with some of the industry's largest owners and operators of rental homes. 
                   Listen to how Karasai is changing the way people find and verify their new rental home.
                 </p>
@@ -215,9 +215,7 @@ export default function HomePage() {
               
               <div className="space-y-6 text-left text-neutral-dark/80">
                 <p>
-                  We hate hearing about people who have their hard earned money taken by unscrupulous people. 
-                  So we created KARASAI, a verification service that exists to ensure you are dealing directly 
-                  with the owner or landlord of a rental property.
+                  We hate hearing from people who had their hard earned money taken by scammers. So we created KARASAI, an independent verification service that exists to ensure you are dealing directly with the true owner or landlord of a rental property.
                 </p>
                 
                 <p>

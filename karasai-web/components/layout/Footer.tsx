@@ -37,7 +37,7 @@ export default function Footer() {
           <div className="overflow-hidden rounded-lg bg-karasai-light shadow-lg">
             <div className="relative h-48">
               <Image
-                src="/images/footer/ninthgrid-d6-bg-lCvZY-unsplash.jpg"
+                src="/images/footer/dina-badamshina-j7vbBmTHmjY-unsplash.jpg"
                 alt="First time renter"
                 fill
                 className="object-cover"
@@ -57,7 +57,7 @@ export default function Footer() {
           <div className="overflow-hidden rounded-lg bg-karasai-light shadow-lg">
             <div className="relative h-48">
               <Image
-                src="/images/footer/rodeo-project-management-software-ONe-snuCaqQ-unsplash.jpg"
+                src="/images/footer/ninthgrid-d6-bg-lCvZY-unsplash.jpg"
                 alt="About us"
                 fill
                 className="object-cover"
@@ -77,7 +77,7 @@ export default function Footer() {
           <div className="overflow-hidden rounded-lg bg-karasai-light shadow-lg">
             <div className="relative h-48">
               <Image
-                src="/images/footer/campaign-creators-qCi_MzVODoU-unsplash.jpg"
+                src="/images/footer/hiveboxx-FwdWO5yEo5s-unsplash.jpg"
                 alt="Karasai guarantee"
                 fill
                 className="object-cover"

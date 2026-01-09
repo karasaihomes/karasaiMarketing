@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { Shield, Search, CheckCircle, Users } from 'lucide-react'
 import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
+import AnimatedStat from '@/components/ui/AnimatedStat'
 
 export const metadata = {
   title: 'About Us - Our Mission to Stop Rental Fraud | Karasai',
@@ -43,25 +44,19 @@ export default function AboutPage() {
                 
                 <div className="space-y-4 text-base leading-relaxed text-neutral-dark/80 md:text-lg">
                   <p>
-                    Karasai was created to bring clarity and confidence to the rental housing industry. 
-                    Fraudulent listings and rental scams cost renters millions of dollars each year and often 
-                    target people in their most vulnerable state.
+                    At Karasai, we want you to feel safe and confident when you’re looking for a place to live. Every year, thousands of people lose money or are scammed by fake rental listings online. These scams can take your cash and even put your identity at risk if someone tricks you into sharing personal information.
                   </p>
                   
                   <p>
-                    Relocating, downsizing, and other major life changes are already stressful enough without 
-                    having to worry about whether the perfect home you just found is legitimate or not.
+                    That’s why Karasai was built – to give you a clear and trustworthy way to check rental homes before you make a move. When you search a home on Karasai, you aren’t guessing if it’s real or who’s on the other end. You get verified information about who actually owns or manages the property, so you know exactly who you’re dealing with before you reach out or send any money.
                   </p>
                   
                   <p>
-                    Karasai is a <strong>free and completely independent</strong> rental verification platform 
-                    designed to help renters quickly confirm whether a property listing is legitimate or if they 
-                    are dealing with the actual property owner.
+                    This means you don’t have to worry about wasting time on fake listings or being bullied into paying fees before you’ve confirmed the rental is real. Karasai gives you full transparency, reduces your risk of being scammed, and helps you move forward with confidence.
                   </p>
                   
                   <p>
-                    By connecting verified property data with rental listings, Karasai allows users to check 
-                    ownership and management information in seconds so they can apply with confidence.
+                    Make Karasai your first stop when searching for a rental home. The faster you can verify a listing, the sooner you can find a great place and feel confident about your decision.
                   </p>
                 </div>
               </div>
@@ -89,8 +84,7 @@ export default function AboutPage() {
                     1. Search the Address
                   </h3>
                   <p className="text-sm leading-relaxed text-neutral-dark/80">
-                    Found a rental you're interested in? Simply enter the property address into Karasai's 
-                    search bar.
+                    Found a rental home you're interested in? Simply enter the address for the home into the Karasai search bar.
                   </p>
                 </div>
 
@@ -105,8 +99,7 @@ export default function AboutPage() {
                     2. Get Verified Info
                   </h3>
                   <p className="text-sm leading-relaxed text-neutral-dark/80">
-                    In seconds, you'll see the verified name of the property owner or manager, so you know 
-                    you're dealing with a real person.
+                    In seconds, you'll see the verified name of the property owner or manager, so you know you're dealing with the actual owner or operator.
                   </p>
                 </div>
 
@@ -178,8 +171,7 @@ export default function AboutPage() {
                     Your Safety First
                   </h3>
                   <p className="text-sm leading-relaxed text-neutral-dark/80">
-                    Our goal is simple: reduce fraud, increase transparency, and make renting safer for 
-                    everyone.
+                    Our goal is simple: help eliminate rental home fraud, increase transparency for renters, and make renting a home safer and easier for everyone.
                   </p>
                 </div>
               </div>
@@ -222,8 +214,7 @@ export default function AboutPage() {
                       Operations Leader
                     </p>
                     <p className="text-sm leading-relaxed text-neutral-dark/80">
-                      [Brief bio about team member, their role at Karasai, and their passion for helping 
-                      renters. 2-3 sentences.]
+                      With over 12 years of marketing strategy experience across diverse industries, Warren understands how to connect people with information that protects them. At Karasai, he focuses on making rental verification accessible and understood by everyone, from first-time renters to seasoned apartment hunters. His ability to read audiences and craft impactful messaging ensures that Karasai's transparency-first approach reaches the people who need it most, when they need it most.
                     </p>
                   </div>
                 </div>
@@ -246,8 +237,7 @@ export default function AboutPage() {
                       Technology Leader
                     </p>
                     <p className="text-sm leading-relaxed text-neutral-dark/80">
-                      [Brief bio about team member, their role at Karasai, and their passion for helping 
-                      renters. 2-3 sentences.]
+                      Josh brings 15 years of full-stack development and operations expertise to Karasai's mission of making rental housing safer. He architected the platform that connects renters to verified property ownership data in seconds, combining technical precision with strategic vision to eliminate the inefficiencies that allow rental scams to thrive. At Karasai, Josh doesn't just strategize solutions; he builds them, ensuring every renter has instant access to the truth about who they're dealing with.
                     </p>
                   </div>
                 </div>
@@ -282,24 +272,9 @@ export default function AboutPage() {
           <div className="container-custom">
             <div className="mx-auto max-w-5xl">
               <div className="grid gap-8 text-center md:grid-cols-3">
-                <div>
-                  <p className="mb-2 text-4xl font-bold text-karasai-blue md:text-5xl">1000s</p>
-                  <p className="text-sm font-semibold uppercase tracking-wide text-neutral-dark md:text-base">
-                    Verified Properties
-                  </p>
-                </div>
-                <div>
-                  <p className="mb-2 text-4xl font-bold text-karasai-blue md:text-5xl">100%</p>
-                  <p className="text-sm font-semibold uppercase tracking-wide text-neutral-dark md:text-base">
-                    Free to Use
-                  </p>
-                </div>
-                <div>
-                  <p className="mb-2 text-4xl font-bold text-karasai-blue md:text-5xl">24/7</p>
-                  <p className="text-sm font-semibold uppercase tracking-wide text-neutral-dark md:text-base">
-                    Instant Verification
-                  </p>
-                </div>
+                <AnimatedStat value="1000s" label="Verified Properties" />
+                <AnimatedStat value="100%" label="Free to Use" />
+                <AnimatedStat value="24/7" label="Instant Verification" />
               </div>
             </div>
           </div>
